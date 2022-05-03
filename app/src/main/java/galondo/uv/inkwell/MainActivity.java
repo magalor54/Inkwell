@@ -26,6 +26,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
@@ -54,17 +55,6 @@ public class MainActivity extends AppCompatActivity {
     private void Connector(){
         HTTPConnector httpConnector = new HTTPConnector(url, true);
         httpConnector.execute();
-    }
-
-    private void getCovers(){
-        for (int j = 0; j < libros.size(); j++) {
-
-            url = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + libros.get(j).getISBN();
-            //Connector();
-
-            HTTPConnector httpConnector2 = new HTTPConnector(url, false);
-            httpConnector2.execute();
-        }
     }
 
     private void RecycleView(){
@@ -143,52 +133,37 @@ public class MainActivity extends AppCompatActivity {
                 }
                 in.close();
 
-                if(type){
-                    try {
-                        JSONObject object = new JSONObject(writer.toString());
-                        JSONArray result = object.getJSONArray("results");
-                        //JSONArray records = result.getJSONArray("records");
+                try {
+                    JSONObject object = new JSONObject(writer.toString());
+                    JSONArray result = object.getJSONArray("results");
+                    //JSONArray records = result.getJSONArray("records");
 
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                for (int i = 0; i < result.length(); i++) {
-                                    try {
-                                        JSONObject rec = result.getJSONObject(i);
-                                        JSONArray bookDetalis = rec.getJSONArray("book_details");
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            for (int i = 0; i < result.length(); i++) {
+                                try {
+                                    JSONObject rec = result.getJSONObject(i);
+                                    JSONArray bookDetalis = rec.getJSONArray("book_details");
 
-                                        if(bookDetalis.getJSONObject(0).getString("primary_isbn10").compareTo("None") != 0) {
-                                            Log.d(null, "TITULO: " + bookDetalis.getJSONObject(0).getString("title"));
-                                            Log.d(null, "AUTOR: " + bookDetalis.getJSONObject(0).getString("author"));
-                                            Log.d(null, "ISBN: " + bookDetalis.getJSONObject(0).getString("primary_isbn10"));
-                                            Log.d(null, "GENERO: " + rec.getString("display_name"));
-                                            Log.d(null, "DESCRIPCION: " + bookDetalis.getJSONObject(0).getString("description"));
-                                            Log.d(null, "-------------------------------------------");
-                                            libros.add(new Libro(bookDetalis.getJSONObject(0).getString("title"), bookDetalis.getJSONObject(0).getString("author"), bookDetalis.getJSONObject(0).getString("primary_isbn10"), rec.getString("display_name"), bookDetalis.getJSONObject(0).getString("description")));
-                                        }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
+                                    if(bookDetalis.getJSONObject(0).getString("primary_isbn10").compareTo("None") != 0) {
+                                        Log.d(null, "TITULO: " + bookDetalis.getJSONObject(0).getString("title"));
+                                        Log.d(null, "AUTOR: " + bookDetalis.getJSONObject(0).getString("author"));
+                                        Log.d(null, "ISBN: " + bookDetalis.getJSONObject(0).getString("primary_isbn10"));
+                                        Log.d(null, "GENERO: " + rec.getString("display_name"));
+                                        Log.d(null, "DESCRIPCION: " + bookDetalis.getJSONObject(0).getString("description"));
+                                        Log.d(null, "-------------------------------------------");
+                                        libros.add(new Libro(bookDetalis.getJSONObject(0).getString("title"), bookDetalis.getJSONObject(0).getString("author"), bookDetalis.getJSONObject(0).getString("primary_isbn10"), rec.getString("display_name"), bookDetalis.getJSONObject(0).getString("description")));
                                     }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
                             }
-                        });
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                        try {
-                            JSONObject object = new JSONObject(writer.toString());
-                            JSONArray itemsArray = object.getJSONArray("items");
-                            JSONObject itemsObj = itemsArray.getJSONObject(0);
-                            JSONObject volumeObj = itemsObj.getJSONObject("volumeInfo");
-                            JSONObject imageLinks = volumeObj.optJSONObject("imageLinks");
-                            String thumbnail = imageLinks.optString("thumbnail");
-                            covers.add(thumbnail);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        } // end try - catch
-
-                    } // end for
+                        }
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+               // end for
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -203,16 +178,23 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList result) {
             super.onPostExecute(result);
-            cont++;
 
-            type = false;
-            if(cont == 1)
-                getCovers();
-            if(covers.size() == libros.size()){
-                for (int i = 0; i < covers.size(); i++)
-                    libros.get(i).setImage_drawable(covers.get(i));
-                RecycleView();
+            for(int i = 0; i < libros.size(); i++){
+                String url = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + libros.get(i).getISBN();
+                galondo.uv.inkwell.HTTPConnector task = new galondo.uv.inkwell.HTTPConnector(url);
+                try {
+                    String urlPortada = task.execute().get();
+                    Log.d(null, urlPortada);
+                    libros.get(i).setImage_drawable(urlPortada);
+
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
             }
+            RecycleView();
 
         }
     }
