@@ -29,7 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.MyViewHolder> {
+public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.ViewHolder> {
 
     private LayoutInflater inflater;
     private ArrayList<Libro> libros;
@@ -42,17 +42,17 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.My
     }
 
     @Override
-    public HorizontalAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public HorizontalAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = inflater.inflate(R.layout.book_recycleview, parent, false);
 
-        MyViewHolder holder = new MyViewHolder(view);
+        ViewHolder holder = new ViewHolder(view);
         view.setOnClickListener(mOnItemClickListener);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(HorizontalAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(HorizontalAdapter.ViewHolder holder, int position) {
 
         // below line is use to set image from URL in our image view.
         Picasso.get().load(libros.get(position).getImage_drawable()).into(holder.iv);
@@ -71,16 +71,18 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.My
         mOnItemClickListener = itemClickListener;
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder{
+    class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView time;
         ImageView iv;
 
-        public MyViewHolder(View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
 
             time = (TextView) itemView.findViewById(R.id.tv);
             iv = (ImageView) itemView.findViewById(R.id.iv);
+            // Put this line in the code of the ViewHolder constructor
+            itemView.setTag(this);
         }
 
     }
@@ -91,8 +93,10 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.My
 
         info.add(libros.get(pos).getName());
         info.add(libros.get(pos).getImage_drawable());
+        info.add(libros.get(pos).getISBN());
         info.add(libros.get(pos).getAutor());
         info.add(libros.get(pos).getGenero());
+        info.add(libros.get(pos).getBookInfo());
 
         return info;
     }

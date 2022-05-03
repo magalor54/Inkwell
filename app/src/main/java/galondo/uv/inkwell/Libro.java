@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 public class Libro extends AppCompatActivity {
 
     private TextView _name;
@@ -98,10 +100,11 @@ public class Libro extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         _name.setText(extras.getString("titulo"));
         //_image_drawable.setImageDrawable(extras.getImageDrawable("imagen"));
+        Picasso.get().load(extras.getString("imagen")).into(_image_drawable);
         _autor.setText(extras.getString("autor"));
         _genero.setText(extras.getString("genero"));
-        _ISBN.setText("ID " + extras.getString("paginas"));
-        _bookInfo.setText(extras.getString("fecha"));
+        _ISBN.setText(extras.getString("ISBN"));
+        _bookInfo.setText(extras.getString("info"));
 
     }
 

@@ -37,7 +37,6 @@ class HTTPConnector extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
 
-        Log.d(null, "He entrado en el thread-------------->");
         Writer writer = new StringWriter();
         char[] buffer = new char[1024];
         String finalURL = new String();
