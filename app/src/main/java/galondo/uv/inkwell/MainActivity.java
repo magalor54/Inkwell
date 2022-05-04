@@ -7,9 +7,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,7 +30,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
@@ -44,18 +53,51 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ArrayList<Libro> libros = new ArrayList();
 
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(view.getContext(), Biblioteca.class);
+                startActivity(myIntent);
+            }
+        });
+
+        ThreadPoolExecutor mThreadPool =
+                new ThreadPoolExecutor(
+                        //initial processor pool size
+                        Runtime.getRuntime().availableProcessors(),
+                        //Max processor pool size
+                        Runtime.getRuntime().availableProcessors(),
+                        //Time to Keep Alive
+                        3,
+                        //TimeUnit for Keep Alive
+                        TimeUnit.SECONDS,
+                        //Queue of Runnables
+                        new LinkedBlockingQueue<Runnable>()
+                );
+
         url = "https://api.nytimes.com/svc/books/v3/lists.json?list-name=hardcover-fiction&api-key=ZPckoDI4RV9SBHcj282KHIbQ8i8Cdjoq";
         HTTPConnector httpConnector = new HTTPConnector(url, libros);
-        httpConnector.execute();
+        //httpConnector.execute();
+
 
         url1 = "https://api.nytimes.com/svc/books/v3/lists.json?list-name=e-book-fiction&api-key=ZPckoDI4RV9SBHcj282KHIbQ8i8Cdjoq";
-        HTTPConnector httpConnector1 = new HTTPConnector(url, libros1);
-        httpConnector1.execute();
+        HTTPConnector httpConnector1 = new HTTPConnector(url1, libros1);
+        //httpConnector1.execute();
 
         url2 = "https://api.nytimes.com/svc/books/v3/lists.json?list-name=paperback-nonfiction&api-key=ZPckoDI4RV9SBHcj282KHIbQ8i8Cdjoq";
-        HTTPConnector httpConnector2 = new HTTPConnector(url, libros2);
-        httpConnector2.execute();
+        HTTPConnector httpConnector2 = new HTTPConnector(url2, libros2);
+        //httpConnector2.execute();
 
+        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.HONEYCOMB) {
+            httpConnector.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, String.valueOf((Void[]) null));
+            httpConnector1.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, String.valueOf((Void[]) null));
+            httpConnector2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, String.valueOf((Void[]) null));
+
+        }
+        else {
+            httpConnector.execute(String.valueOf((Void) null));
+        }
     }
 
 
@@ -149,13 +191,20 @@ public class MainActivity extends AppCompatActivity {
 
                     runOnUiThread(new Runnable() {
                         public void run() {
+                            Log.d(null, "Thread ID------>" + android.os.Process.getThreadPriority(android.os.Process.myTid()));
                             for (int i = 0; i < result.length(); i++) {
                                 try {
                                     JSONObject rec = result.getJSONObject(i);
                                     JSONArray bookDetalis = rec.getJSONArray("book_details");
 
                                     if(bookDetalis.getJSONObject(0).getString("primary_isbn10").compareTo("None") != 0) {
-                                        libros.add(new Libro(bookDetalis.getJSONObject(0).getString("title"), bookDetalis.getJSONObject(0).getString("author"), bookDetalis.getJSONObject(0).getString("primary_isbn10"), rec.getString("display_name"), bookDetalis.getJSONObject(0).getString("description")));
+                                        Log.d(null, "TITULO: " + bookDetalis.getJSONObject(0).getString("title"));
+                                        Log.d(null, "AUTOR: " + bookDetalis.getJSONObject(0).getString("author"));
+                                        Log.d(null, "ISBN: " + bookDetalis.getJSONObject(0).getString("primary_isbn10"));
+                                        Log.d(null, "GENERO: " + rec.getString("display_name"));
+                                        Log.d(null, "DESCRIPCION: " + bookDetalis.getJSONObject(0).getString("description"));
+                                        Log.d(null, "-------------------------------------------");
+                                        libros.add(new Libro(bookDetalis.getJSONObject(0).getString("title"), bookDetalis.getJSONObject(0).getString("author"), "",bookDetalis.getJSONObject(0).getString("primary_isbn10"), rec.getString("display_name"), bookDetalis.getJSONObject(0).getString("description")));
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();

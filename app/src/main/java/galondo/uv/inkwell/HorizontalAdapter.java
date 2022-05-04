@@ -55,8 +55,8 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
     public void onBindViewHolder(HorizontalAdapter.ViewHolder holder, int position) {
 
         // below line is use to set image from URL in our image view.
-        Picasso.get().load(libros.get(position).getImage_drawable()).into(holder.iv);
-
+        Picasso.get().load(libros.get(position).getImage_drawable()).resize(100,100).into(holder.iv);
+        Log.d(null, "------------------>" + libros.get(position).getImage_drawable());
         //holder.iv.setImageResource(imageModelArrayList.get(position).getImage_drawable());
         holder.time.setText(libros.get(position).getName());
 

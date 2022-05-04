@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AddLibro">
+
+    <!--Edit text to enter course name-->
+    <EditText
+        android:id="@+id/idEdtBookTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:hint="Enter book Title"
+        android:minHeight="48dp" />
+
+    <!--edit text to enter course duration-->
+    <EditText
+        android:id="@+id/idEdtBookAuthor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:hint="Enter book Author"
+        android:minHeight="48dp" />
+
+    <!--edit text for book description-->
+    <EditText
+        android:id="@+id/idEdtBookDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:hint="Enter Book Description"
+        android:minHeight="48dp" />
+
+    <!--edit text for Book ISBN-->
+    <EditText
+        android:id="@+id/idEdtBookISBN"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:hint="Enter Book ISBN"
+        android:minHeight="48dp" />
+
+    <!--edit text for Book Image-->
+    <EditText
+        android:id="@+id/idEdtBookImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:hint="Enter Book Image"
+        android:minHeight="48dp" />
+
+    <!--edit text for Book Genre-->
+    <EditText
+        android:id="@+id/idEdtBookGenre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:hint="Enter Book Genre"
+        android:minHeight="48dp" />
+
+    <!--button for adding new course-->
+    <Button
+        android:id="@+id/idBtnAddBook"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="Add Book"
+        android:textAllCaps="false" />
+
+</LinearLayout>
