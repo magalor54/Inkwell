@@ -100,7 +100,7 @@ public class Libro extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         _name.setText(extras.getString("titulo"));
         //_image_drawable.setImageDrawable(extras.getImageDrawable("imagen"));
-        Picasso.get().load(extras.getString("imagen")).fit().into(_image_drawable);
+        Picasso.get().load(extras.getString("imagen")).into(_image_drawable);
         _autor.setText(extras.getString("autor"));
         _genero.setText(extras.getString("genero"));
         _ISBN.setText(extras.getString("ISBN"));

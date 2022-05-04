@@ -49,6 +49,13 @@ public class AddLibro extends AppCompatActivity {
                 String bookImage = bookImageEdt.getText().toString();
                 String bookGenre = bookGenreEdt.getText().toString();
 
+                Log.d(null, "Titulo: " + bookTitle);
+
+                Log.d(null, "Autor: " + bookAuthor);
+                Log.d(null, "Descripcion: " + bookDescription);
+                Log.d(null, "ISBN: " + bookISBN);
+                Log.d(null, "Imagen: " + bookImage);
+                Log.d(null, "Genero: " + bookGenre);
 
                 // validating if the text fields are empty or not.
                 if (bookTitle.isEmpty() && bookAuthor.isEmpty() && bookDescription.isEmpty() && bookISBN.isEmpty() && bookImage.isEmpty() && bookGenre.isEmpty()) {
@@ -62,7 +69,7 @@ public class AddLibro extends AppCompatActivity {
 
                 // on below line we are calling a method to add new
                 // course to sqlite data and pass all our values to it.
-                dbHandler.addNewCourse(bookTitle, bookAuthor, bookDescription, bookISBN, bookImage, bookGenre);
+                dbHandler.addNewCourse(bookTitle, bookAuthor, bookImage, bookISBN,bookGenre ,bookDescription );
 
                 // after adding the data we are displaying a toast message.
                 Toast.makeText(AddLibro.this, "Add has been added.", Toast.LENGTH_SHORT).show();

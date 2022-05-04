@@ -136,10 +136,10 @@ public class MainActivity extends AppCompatActivity {
 
 
             intent.putExtra("titulo", String.valueOf(info.get(0)));
-            intent.putExtra("imagen", String.valueOf(info.get(1)));
-            intent.putExtra("autor", String.valueOf(info.get(2)));
-            intent.putExtra("genero", String.valueOf(info.get(3)));
-            intent.putExtra("ISBN", String.valueOf(info.get(4)));
+            intent.putExtra("autor", String.valueOf(info.get(1)));
+            intent.putExtra("imagen", String.valueOf(info.get(2)));
+            intent.putExtra("ISBN", String.valueOf(info.get(3)));
+            intent.putExtra("genero", String.valueOf(info.get(4)));
             intent.putExtra("info", String.valueOf(info.get(5)));
 
             startActivity(intent);
