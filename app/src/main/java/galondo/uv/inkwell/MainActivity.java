@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Libro> libros1 = new ArrayList();
     ArrayList<Libro> libros2 = new ArrayList();
     ArrayList<String> covers = new ArrayList();
+    ArrayList<Libro> todos_libros = new ArrayList();
     String url, url1, url2;
     int cont = 0;
 
@@ -58,6 +59,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(view.getContext(), Biblioteca.class);
+                startActivity(myIntent);
+            }
+        });
+
+        FloatingActionButton fab2 = findViewById(R.id.fab2);
+        fab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(view.getContext(), Busqueda.class);
+                Log.d(null, todos_libros.toString());
+                myIntent.putExtra("todos_libros", todos_libros);
                 startActivity(myIntent);
             }
         });
@@ -246,10 +258,13 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }
+            todos_libros.addAll(libro);
             RecycleView(libro);
 
         }
     }
+
+
     };
 
 

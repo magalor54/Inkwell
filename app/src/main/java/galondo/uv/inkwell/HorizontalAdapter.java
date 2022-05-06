@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,10 +31,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.ViewHolder> {
+public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.ViewHolder> implements Filterable {
 
     private LayoutInflater inflater;
     private ArrayList<Libro> libros;
+    private ArrayList<Libro> libros_filtrados;
     View.OnClickListener mOnItemClickListener;
 
     public HorizontalAdapter(Context ctx, ArrayList<Libro> libros){
@@ -99,6 +102,37 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
         info.add(libros.get(pos).getBookInfo());
 
         return info;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter(){
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence){
+                String chartString = charSequence.toString();
+                if(chartString.isEmpty()){
+                    libros_filtrados = libros;
+                } else{
+                    ArrayList<Libro> filteredList = new ArrayList<>();
+                    for(Libro libr: libros){
+                        if(libr.getName().toLowerCase().contains(chartString.toLowerCase())){
+                            filteredList.add(libr);
+                        }
+                    }
+                    libros_filtrados = filteredList;
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = libros_filtrados;
+                //municipios = municipios_filtrados;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                libros_filtrados = (ArrayList<Libro>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
 }

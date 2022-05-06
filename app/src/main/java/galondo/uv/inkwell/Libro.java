@@ -8,7 +8,9 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-public class Libro extends AppCompatActivity {
+import java.io.Serializable;
+
+public class Libro extends AppCompatActivity implements Serializable {
 
     private TextView _name;
     private ImageView _image_drawable;
