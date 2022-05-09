@@ -45,19 +45,21 @@ public class MainActivity extends AppCompatActivity {
     private HorizontalAdapter adapterHardcover;
     private HorizontalAdapter adapterFiction;
     private HorizontalAdapter adapterPaper;
-    private int flag;
     ArrayList<Libro> hardCoverBooks = new ArrayList();
     ArrayList<Libro> fictionBooks = new ArrayList();
     ArrayList<Libro> paperBlack = new ArrayList();
     ArrayList<String> covers = new ArrayList();
     ArrayList<Libro> todos_libros = new ArrayList();
-    String url, url1, url2;
-    int cont = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        this.todos_libros = (ArrayList<Libro>) getIntent().getSerializableExtra("todos_libros");
+        this.fictionBooks = (ArrayList<Libro>) getIntent().getSerializableExtra("fictionBooks");
+        this.paperBlack = (ArrayList<Libro>) getIntent().getSerializableExtra("paperBlack");
+        this.hardCoverBooks = (ArrayList<Libro>) getIntent().getSerializableExtra("hardCoverBooks");
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -73,46 +75,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(view.getContext(), Busqueda.class);
-                Log.d(null, todos_libros.toString());
                 myIntent.putExtra("todos_libros", todos_libros);
                 startActivity(myIntent);
             }
         });
 
-        url = "https://api.nytimes.com/svc/books/v3/lists.json?list-name=hardcover-fiction&api-key=ZPckoDI4RV9SBHcj282KHIbQ8i8Cdjoq";
-        HTTPConnector httpConnector = new HTTPConnector(url);
-        //httpConnector.execute();
-
-
-        url1 = "https://api.nytimes.com/svc/books/v3/lists.json?list-name=e-book-fiction&api-key=ZPckoDI4RV9SBHcj282KHIbQ8i8Cdjoq";
-        HTTPConnector httpConnector1 = new HTTPConnector(url1);
-        //httpConnector1.execute();
-
-        url2 = "https://api.nytimes.com/svc/books/v3/lists.json?list-name=paperback-nonfiction&api-key=ZPckoDI4RV9SBHcj282KHIbQ8i8Cdjoq";
-        HTTPConnector httpConnector2 = new HTTPConnector(url2);
-        //httpConnector2.execute();
-
-        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.HONEYCOMB) {
-            httpConnector.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, String.valueOf((Void[]) null));
-            httpConnector1.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, String.valueOf((Void[]) null));
-            httpConnector2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, String.valueOf((Void[]) null));
-
-        }
-        else {
-            httpConnector.execute(String.valueOf((Void) null));
-        }
-
-
-        /*while(cont < 3){
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-         */
-
+        RecycleView(hardCoverBooks);
+        RecycleView(fictionBooks);
+        RecycleView(paperBlack);
     }
 
 
@@ -139,8 +109,6 @@ public class MainActivity extends AppCompatActivity {
             recyclerView2.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
             adapterPaper.setOnItemClickListener(onItemClickListener2);
         }
-
-
     }
 
     private View.OnClickListener onItemClickListener = new View.OnClickListener() {
@@ -148,17 +116,11 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View view) {
             ArrayList info = new ArrayList();
 
-            // This viewHolder will have all required values.
             RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
 
-            //Log.d(null, "Este es mi print---->"+adapter.getInfoPosition(viewHolder.getAdapterPosition()).toString());
-            Log.d(null,  view.getTag().toString());
             info = adapterHardcover.getInfoPosition(viewHolder.getAdapterPosition());
-            Log.d(null, info.toString());
-            // Implement the listener!
 
             Intent intent = new Intent(getApplicationContext(), Libro.class);
-
 
             intent.putExtra("titulo", String.valueOf(info.get(0)));
             intent.putExtra("autor", String.valueOf(info.get(1)));
@@ -176,17 +138,11 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View view) {
             ArrayList info = new ArrayList();
 
-            // This viewHolder will have all required values.
             RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
 
-            //Log.d(null, "Este es mi print---->"+adapter.getInfoPosition(viewHolder.getAdapterPosition()).toString());
-            Log.d(null,  view.getTag().toString());
             info = adapterFiction.getInfoPosition(viewHolder.getAdapterPosition());
-            Log.d(null, info.toString());
-            // Implement the listener!
 
             Intent intent = new Intent(getApplicationContext(), Libro.class);
-
 
             intent.putExtra("titulo", String.valueOf(info.get(0)));
             intent.putExtra("autor", String.valueOf(info.get(1)));
@@ -204,17 +160,11 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View view) {
             ArrayList info = new ArrayList();
 
-            // This viewHolder will have all required values.
             RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
 
-            //Log.d(null, "Este es mi print---->"+adapter.getInfoPosition(viewHolder.getAdapterPosition()).toString());
-            Log.d(null,  view.getTag().toString());
             info = adapterPaper.getInfoPosition(viewHolder.getAdapterPosition());
-            Log.d(null, info.toString());
-            // Implement the listener!
 
             Intent intent = new Intent(getApplicationContext(), Libro.class);
-
 
             intent.putExtra("titulo", String.valueOf(info.get(0)));
             intent.putExtra("autor", String.valueOf(info.get(1)));
@@ -226,139 +176,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
     };
-
-
-    class HTTPConnector extends AsyncTask<String, Void, ArrayList> {
-
-        public HTTPConnector(String url) {
-            this.url = url;
-        }
-
-        String url;
-        ArrayList<Libro> libros = new ArrayList<Libro>();
-
-        @Override
-        protected ArrayList doInBackground(String... params) {
-
-            Writer writer = new StringWriter();
-            char[] buffer = new char[1024];
-            try {
-                URL obj = new URL(url);
-                HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-                con.setRequestMethod("GET");
-                //add request header
-                con.setRequestProperty("user-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36");
-                con.setRequestProperty("accept", "application/json;");
-                con.setRequestProperty("accept-language", "es");
-                con.connect();
-                int responseCode = con.getResponseCode();
-                if (responseCode != HttpURLConnection.HTTP_OK) {
-                    throw new IOException("HTTP error code: " + responseCode);
-                }
-                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF8"));
-
-                int n;
-                while ((n = in.read(buffer)) != -1) {
-                    writer.write(buffer, 0, n);
-
-                }
-                in.close();
-
-                try {
-                    JSONObject object = new JSONObject(writer.toString());
-                    JSONArray result = object.getJSONArray("results");
-                    //JSONArray records = result.getJSONArray("records");
-
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            Log.d(null, "Thread ID------>" + android.os.Process.getThreadPriority(android.os.Process.myTid()));
-                            for (int i = 0; i < result.length(); i++) {
-                                try {
-                                    JSONObject rec = result.getJSONObject(i);
-                                    JSONArray bookDetalis = rec.getJSONArray("book_details");
-
-                                    if(bookDetalis.getJSONObject(0).getString("primary_isbn10").compareTo("None") != 0) {
-                                       /*
-                                        Log.d(null, "TITULO: " + bookDetalis.getJSONObject(0).getString("title"));
-                                        Log.d(null, "AUTOR: " + bookDetalis.getJSONObject(0).getString("author"));
-                                        Log.d(null, "ISBN: " + bookDetalis.getJSONObject(0).getString("primary_isbn10"));
-                                        Log.d(null, "GENERO: " + rec.getString("display_name"));
-                                        Log.d(null, "DESCRIPCION: " + bookDetalis.getJSONObject(0).getString("description"));
-                                        Log.d(null, "-------------------------------------------");
-                                        */
-                                        libros.add(new Libro(bookDetalis.getJSONObject(0).getString("title"), bookDetalis.getJSONObject(0).getString("author"), "",bookDetalis.getJSONObject(0).getString("primary_isbn10"), rec.getString("display_name"), bookDetalis.getJSONObject(0).getString("description")));
-
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-                    });
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-               // end for
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return libros;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList result) {
-            super.onPostExecute(result);
-
-            ArrayList<Libro> libro = result;
-
-
-            for(int i = 0; i < libro.size(); i++){
-                String url = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + libro.get(i).getISBN();
-                galondo.uv.inkwell.HTTPConnector task = new galondo.uv.inkwell.HTTPConnector(url);
-                try {
-                    String urlPortada = task.execute().get();
-                    //Log.d(null, urlPortada);
-                    libro.get(i).setImage_drawable(urlPortada);
-
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            todos_libros.addAll(libro);
-            cont++;
-
-            if(cont == 3)
-                ordenarLibros();
-
-        }
-    }
-
-    void ordenarLibros(){
-
-        for(int i = 0; i < todos_libros.size(); i++){
-            if(todos_libros.get(i).getGenero().equals("Hardcover Fiction")) {
-                hardCoverBooks.add(todos_libros.get(i));
-            }
-            if(todos_libros.get(i).getGenero().equals("E-Book Fiction")){
-                fictionBooks.add(todos_libros.get(i));
-            }
-            if(todos_libros.get(i).getGenero().equals("Paperback Nonfiction")) {
-                paperBlack.add(todos_libros.get(i));
-            }
-
-        }
-        RecycleView(hardCoverBooks);
-        RecycleView(fictionBooks);
-        RecycleView(paperBlack);
-
-    }
-
 
     };
 
