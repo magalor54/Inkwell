@@ -111,10 +111,4 @@ public class Busqueda extends AppCompatActivity {
             startActivity(intent);
         }
     };
-
-
-
-
-
-
 }

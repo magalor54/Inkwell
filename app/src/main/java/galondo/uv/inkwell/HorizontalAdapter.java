@@ -41,6 +41,7 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
     public HorizontalAdapter(Context ctx, ArrayList<Libro> libros){
 
         inflater = LayoutInflater.from(ctx);
+        libros_filtrados = libros;
         this.libros = libros;
     }
 
@@ -57,17 +58,21 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
     @Override
     public void onBindViewHolder(HorizontalAdapter.ViewHolder holder, int position) {
 
+
         // below line is use to set image from URL in our image view.
-        Picasso.get().load(libros.get(position).getImage_drawable()).resize(100,100).into(holder.iv);
-        Log.d(null, "------------------>" + libros.get(position).getImage_drawable());
+        if(!libros_filtrados.get(position).getImage_drawable().isEmpty()) {
+            //Log.d(null, "------------------>" + libros.get(position).getImage_drawable());
+            Picasso.get().load(libros_filtrados.get(position).getImage_drawable()).resize(100, 100).into(holder.iv);
+        }else
+            Picasso.get().load("https://via.placeholder.com/300x400").into(holder.iv);
         //holder.iv.setImageResource(imageModelArrayList.get(position).getImage_drawable());
-        holder.time.setText(libros.get(position).getName());
+        holder.time.setText(libros_filtrados.get(position).getName());
 
     }
 
     @Override
     public int getItemCount() {
-        return libros.size();
+        return libros_filtrados.size();
     }
 
     public void setOnItemClickListener(View.OnClickListener itemClickListener) {
@@ -94,12 +99,12 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
 
         ArrayList info = new ArrayList<>();
 
-        info.add(libros.get(pos).getName());
-        info.add(libros.get(pos).getImage_drawable());
-        info.add(libros.get(pos).getISBN());
-        info.add(libros.get(pos).getAutor());
-        info.add(libros.get(pos).getGenero());
-        info.add(libros.get(pos).getBookInfo());
+        info.add(libros_filtrados.get(pos).getName());
+        info.add(libros_filtrados.get(pos).getImage_drawable());
+        info.add(libros_filtrados.get(pos).getISBN());
+        info.add(libros_filtrados.get(pos).getAutor());
+        info.add(libros_filtrados.get(pos).getGenero());
+        info.add(libros_filtrados.get(pos).getBookInfo());
 
         return info;
     }
@@ -114,7 +119,7 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
                     libros_filtrados = libros;
                 } else{
                     ArrayList<Libro> filteredList = new ArrayList<>();
-                    for(Libro libr: libros){
+                    for(Libro libr: libros_filtrados){
                         if(libr.getName().toLowerCase().contains(chartString.toLowerCase())){
                             filteredList.add(libr);
                         }
@@ -123,7 +128,7 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
                 }
                 FilterResults filterResults = new FilterResults();
                 filterResults.values = libros_filtrados;
-                //municipios = municipios_filtrados;
+                
                 return filterResults;
             }
 
