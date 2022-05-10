@@ -39,10 +39,16 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
-    private HorizontalAdapter adapter;
-    ArrayList<Libro> libros = new ArrayList();
-    ArrayList<Libro> libros1 = new ArrayList();
-    ArrayList<Libro> libros2 = new ArrayList();
+    private RecyclerView recyclerView1;
+    private RecyclerView recyclerView2;
+
+    private HorizontalAdapter adapterHardcover;
+    private HorizontalAdapter adapterFiction;
+    private HorizontalAdapter adapterPaper;
+    private int flag;
+    ArrayList<Libro> hardCoverBooks = new ArrayList();
+    ArrayList<Libro> fictionBooks = new ArrayList();
+    ArrayList<Libro> paperBlack = new ArrayList();
     ArrayList<String> covers = new ArrayList();
     ArrayList<Libro> todos_libros = new ArrayList();
     String url, url1, url2;
@@ -52,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ArrayList<Libro> libros = new ArrayList();
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -74,31 +79,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ThreadPoolExecutor mThreadPool =
-                new ThreadPoolExecutor(
-                        //initial processor pool size
-                        Runtime.getRuntime().availableProcessors(),
-                        //Max processor pool size
-                        Runtime.getRuntime().availableProcessors(),
-                        //Time to Keep Alive
-                        3,
-                        //TimeUnit for Keep Alive
-                        TimeUnit.SECONDS,
-                        //Queue of Runnables
-                        new LinkedBlockingQueue<Runnable>()
-                );
-
         url = "https://api.nytimes.com/svc/books/v3/lists.json?list-name=hardcover-fiction&api-key=ZPckoDI4RV9SBHcj282KHIbQ8i8Cdjoq";
-        HTTPConnector httpConnector = new HTTPConnector(url, libros);
+        HTTPConnector httpConnector = new HTTPConnector(url);
         //httpConnector.execute();
 
 
         url1 = "https://api.nytimes.com/svc/books/v3/lists.json?list-name=e-book-fiction&api-key=ZPckoDI4RV9SBHcj282KHIbQ8i8Cdjoq";
-        HTTPConnector httpConnector1 = new HTTPConnector(url1, libros1);
+        HTTPConnector httpConnector1 = new HTTPConnector(url1);
         //httpConnector1.execute();
 
         url2 = "https://api.nytimes.com/svc/books/v3/lists.json?list-name=paperback-nonfiction&api-key=ZPckoDI4RV9SBHcj282KHIbQ8i8Cdjoq";
-        HTTPConnector httpConnector2 = new HTTPConnector(url2, libros2);
+        HTTPConnector httpConnector2 = new HTTPConnector(url2);
         //httpConnector2.execute();
 
         if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.HONEYCOMB) {
@@ -110,6 +101,18 @@ public class MainActivity extends AppCompatActivity {
         else {
             httpConnector.execute(String.valueOf((Void) null));
         }
+
+
+        /*while(cont < 3){
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+         */
+
     }
 
 
@@ -117,16 +120,26 @@ public class MainActivity extends AppCompatActivity {
 
         if(libro.get(0).getGenero().equals("Hardcover Fiction")) {
             recyclerView = (RecyclerView) findViewById(R.id.recycler);
+            adapterHardcover = new HorizontalAdapter(this, libro);
+            recyclerView.setAdapter(adapterHardcover);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
+            adapterHardcover.setOnItemClickListener(onItemClickListener);
         }
-        if(libro.get(0).getGenero().equals("E-Book Fiction"))
-            recyclerView = (RecyclerView) findViewById(R.id.recycler1);
-        if(libro.get(0).getGenero().equals("Paperback Nonfiction"))
-            recyclerView = (RecyclerView) findViewById(R.id.recycler2);
+        if(libro.get(0).getGenero().equals("E-Book Fiction")) {
+            recyclerView1 = (RecyclerView) findViewById(R.id.recycler1);
+            adapterFiction = new HorizontalAdapter(this, libro);
+            recyclerView1.setAdapter(adapterFiction);
+            recyclerView1.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
+            adapterFiction.setOnItemClickListener(onItemClickListener1);
+        }
+        if(libro.get(0).getGenero().equals("Paperback Nonfiction")){
+            recyclerView2 = (RecyclerView) findViewById(R.id.recycler2);
+            adapterPaper = new HorizontalAdapter(this, libro);
+            recyclerView2.setAdapter(adapterPaper);
+            recyclerView2.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
+            adapterPaper.setOnItemClickListener(onItemClickListener2);
+        }
 
-        adapter = new HorizontalAdapter(this, libro);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
-        adapter.setOnItemClickListener(onItemClickListener);
 
     }
 
@@ -140,7 +153,63 @@ public class MainActivity extends AppCompatActivity {
 
             //Log.d(null, "Este es mi print---->"+adapter.getInfoPosition(viewHolder.getAdapterPosition()).toString());
             Log.d(null,  view.getTag().toString());
-            info = adapter.getInfoPosition(viewHolder.getAdapterPosition());
+            info = adapterHardcover.getInfoPosition(viewHolder.getAdapterPosition());
+            Log.d(null, info.toString());
+            // Implement the listener!
+
+            Intent intent = new Intent(getApplicationContext(), Libro.class);
+
+
+            intent.putExtra("titulo", String.valueOf(info.get(0)));
+            intent.putExtra("autor", String.valueOf(info.get(1)));
+            intent.putExtra("imagen", String.valueOf(info.get(2)));
+            intent.putExtra("ISBN", String.valueOf(info.get(3)));
+            intent.putExtra("genero", String.valueOf(info.get(4)));
+            intent.putExtra("info", String.valueOf(info.get(5)));
+
+            startActivity(intent);
+        }
+    };
+
+    private View.OnClickListener onItemClickListener1 = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            ArrayList info = new ArrayList();
+
+            // This viewHolder will have all required values.
+            RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
+
+            //Log.d(null, "Este es mi print---->"+adapter.getInfoPosition(viewHolder.getAdapterPosition()).toString());
+            Log.d(null,  view.getTag().toString());
+            info = adapterFiction.getInfoPosition(viewHolder.getAdapterPosition());
+            Log.d(null, info.toString());
+            // Implement the listener!
+
+            Intent intent = new Intent(getApplicationContext(), Libro.class);
+
+
+            intent.putExtra("titulo", String.valueOf(info.get(0)));
+            intent.putExtra("autor", String.valueOf(info.get(1)));
+            intent.putExtra("imagen", String.valueOf(info.get(2)));
+            intent.putExtra("ISBN", String.valueOf(info.get(3)));
+            intent.putExtra("genero", String.valueOf(info.get(4)));
+            intent.putExtra("info", String.valueOf(info.get(5)));
+
+            startActivity(intent);
+        }
+    };
+
+    private View.OnClickListener onItemClickListener2 = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            ArrayList info = new ArrayList();
+
+            // This viewHolder will have all required values.
+            RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
+
+            //Log.d(null, "Este es mi print---->"+adapter.getInfoPosition(viewHolder.getAdapterPosition()).toString());
+            Log.d(null,  view.getTag().toString());
+            info = adapterPaper.getInfoPosition(viewHolder.getAdapterPosition());
             Log.d(null, info.toString());
             // Implement the listener!
 
@@ -161,13 +230,12 @@ public class MainActivity extends AppCompatActivity {
 
     class HTTPConnector extends AsyncTask<String, Void, ArrayList> {
 
-        public HTTPConnector(String url, ArrayList<Libro> libro) {
+        public HTTPConnector(String url) {
             this.url = url;
-            this.libros = libro;
         }
 
         String url;
-        ArrayList<Libro> libros;
+        ArrayList<Libro> libros = new ArrayList<Libro>();
 
         @Override
         protected ArrayList doInBackground(String... params) {
@@ -210,13 +278,16 @@ public class MainActivity extends AppCompatActivity {
                                     JSONArray bookDetalis = rec.getJSONArray("book_details");
 
                                     if(bookDetalis.getJSONObject(0).getString("primary_isbn10").compareTo("None") != 0) {
+                                       /*
                                         Log.d(null, "TITULO: " + bookDetalis.getJSONObject(0).getString("title"));
                                         Log.d(null, "AUTOR: " + bookDetalis.getJSONObject(0).getString("author"));
                                         Log.d(null, "ISBN: " + bookDetalis.getJSONObject(0).getString("primary_isbn10"));
                                         Log.d(null, "GENERO: " + rec.getString("display_name"));
                                         Log.d(null, "DESCRIPCION: " + bookDetalis.getJSONObject(0).getString("description"));
                                         Log.d(null, "-------------------------------------------");
+                                        */
                                         libros.add(new Libro(bookDetalis.getJSONObject(0).getString("title"), bookDetalis.getJSONObject(0).getString("author"), "",bookDetalis.getJSONObject(0).getString("primary_isbn10"), rec.getString("display_name"), bookDetalis.getJSONObject(0).getString("description")));
+
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -258,10 +329,34 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }
+
             todos_libros.addAll(libro);
-            RecycleView(libro);
+            cont++;
+
+            if(cont == 3)
+                ordenarLibros();
 
         }
+    }
+
+    void ordenarLibros(){
+
+        for(int i = 0; i < todos_libros.size(); i++){
+            if(todos_libros.get(i).getGenero().equals("Hardcover Fiction")) {
+                hardCoverBooks.add(todos_libros.get(i));
+            }
+            if(todos_libros.get(i).getGenero().equals("E-Book Fiction")){
+                fictionBooks.add(todos_libros.get(i));
+            }
+            if(todos_libros.get(i).getGenero().equals("Paperback Nonfiction")) {
+                paperBlack.add(todos_libros.get(i));
+            }
+
+        }
+        RecycleView(hardCoverBooks);
+        RecycleView(fictionBooks);
+        RecycleView(paperBlack);
+
     }
 
 
