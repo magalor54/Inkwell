@@ -4,13 +4,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -83,6 +87,8 @@ public class MainActivity extends AppCompatActivity {
         RecycleView(hardCoverBooks);
         RecycleView(fictionBooks);
         RecycleView(paperBlack);
+
+        startAlert();
     }
 
 
@@ -176,6 +182,17 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
     };
+
+    public void startAlert() {
+        Intent intent = new Intent(this, MyBroadcastReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this.getApplicationContext(), 234324243, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()
+                + (5000), pendingIntent);
+        Toast.makeText(this, "Alarm set in " + 5000 + " milliseconds",
+                Toast.LENGTH_LONG).show();
+    }
 
     };
 
