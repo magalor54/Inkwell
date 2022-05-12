@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -126,10 +127,24 @@ public class DBHandler extends SQLiteOpenHelper {
         return courseModalArrayList;
     }
 
+    // below is the method for deleting our course.
+    public void deleteCourse(String courseName) {
+        Log.d(null, "DBHandler delete Course-------------> " + courseName);
+        // on below line we are creating
+        // a variable to write our database.
+        SQLiteDatabase db = this.getWritableDatabase();
+        // on below line we are calling a method to delete our
+        // course and we are comparing it with our course name.
+        db.delete(TABLE_NAME, "title=?", new String[]{courseName});
+        db.close();
+    }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // this method is called to check if the table exists already.
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
     }
+
+
 }

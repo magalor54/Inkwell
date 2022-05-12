@@ -1,11 +1,19 @@
 package galondo.uv.inkwell;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
@@ -75,6 +83,9 @@ public class Libro extends AppCompatActivity implements Serializable {
     private String genero;
     private String bookInfo;
 
+    private Boolean isLocal;
+    private DBHandler dbHandler;
+
     public Libro() {
     }
 
@@ -107,7 +118,33 @@ public class Libro extends AppCompatActivity implements Serializable {
         _genero.setText(extras.getString("genero"));
         _ISBN.setText(extras.getString("ISBN"));
         _bookInfo.setText(extras.getString("info"));
+        isLocal = extras.getBoolean("local");
+        dbHandler = new DBHandler(Libro.this);
+        }
+
+    /*************************************/
+    /* Create the actionbar options menu */
+    /*************************************/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        if (isLocal) {
+            menu.add(0, 0, 0, "Delete").setIcon(R.drawable.ic_baseline_delete_24)
+                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+        }
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        dbHandler.deleteCourse(_name.getText().toString());
+        return true;
+
 
     }
 
-}
+
+    }
+
+

@@ -65,8 +65,6 @@ public class AddLibro extends AppCompatActivity {
 
                 bookImage = ConexionPortada(bookISBN);
 
-                Log.d(null, "------------------->" + bookImage);
-
                 // on below line we are calling a method to add new
                 // course to sqlite data and pass all our values to it.
                 dbHandler.addNewCourse(bookTitle, bookAuthor, bookImage, bookISBN,bookGenre ,bookDescription );
