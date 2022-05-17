@@ -42,6 +42,8 @@
             android:name=".MainActivity"
             android:exported="false" />
 
+        <receiver android:name=".MyBroadcastReceiver"></receiver>
+
 
     </application>
 

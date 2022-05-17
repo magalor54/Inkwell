@@ -200,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
                 + (5000), pendingIntent);
         Toast.makeText(this, "Alarm set in " + 5000 + " milliseconds",
                 Toast.LENGTH_LONG).show();
+
     }
 
     };
