@@ -1,6 +1,7 @@
 package galondo.uv.inkwell;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 public class Busqueda extends AppCompatActivity {
 
     ArrayList<Libro> todos_libros = new ArrayList();
-    private HorizontalAdapter adapter;
+    private BusquedasAdapter adapter;
     private RecyclerView recyclerView;
     private SearchView searchView;
 
@@ -52,6 +53,7 @@ public class Busqueda extends AppCompatActivity {
                 recyclerView = (RecyclerView)findViewById(R.id.recycler);
                 recyclerView.setLayoutManager(new LinearLayoutManager(Busqueda.this));
                 recyclerView.setAdapter(adapter);
+                recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
                 adapter.setOnItemClickListener(onItemClickListener);
                 return false;
             }
@@ -74,7 +76,7 @@ public class Busqueda extends AppCompatActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
 
-        adapter = new HorizontalAdapter(this, libro);
+        adapter = new BusquedasAdapter(this, libro);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
         adapter.setOnItemClickListener(onItemClickListener);
