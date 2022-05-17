@@ -19,43 +19,89 @@
 
             <TextView
                 android:id="@+id/textView"
-                android:layout_width="wrap_content"
+                android:layout_width="328dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="80dp"
-                android:text="INKWELL"
-                android:textSize="34sp" />
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/roxale_caligraphic"
+                android:text="Inkwell"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="60sp"
+                android:textStyle="bold" />
 
             <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="wrap_content"
+                android:id="@+id/featherChiquito"
+                android:layout_width="130dp"
+                android:layout_height="76dp"
+                android:layout_marginTop="10dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/featherchiquido" />
+
+
+            <ImageView
+                android:id="@+id/inkChiquito"
+                android:layout_width="118dp"
+                android:layout_height="64dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/inkchiquitopng" />
+
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="48dp"
-                android:src="@mipmap/ic_launcher" />
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:drawableEnd="@drawable/ic_baseline_arrow_forward_ios_24"
+                android:paddingEnd="10dp"
+                android:shadowColor="@color/colorPrimary"
+                android:text="Hard Cover Books"
+                android:textSize="20sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="44dp"
+                android:layout_marginBottom="10dp"
                 android:padding="10dp"
                 tools:ignore="MissingConstraints">
 
             </androidx.recyclerview.widget.RecyclerView>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:drawableEnd="@drawable/ic_baseline_arrow_forward_ios_24"
+                android:paddingEnd="10dp"
+                android:shadowColor="@color/colorPrimary"
+                android:text="E-book Fiction Books"
+                android:textSize="20sp" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="44dp"
+                android:layout_marginBottom="10dp"
                 android:padding="10dp">
 
             </androidx.recyclerview.widget.RecyclerView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:drawableEnd="@drawable/ic_baseline_arrow_forward_ios_24"
+                android:paddingEnd="10dp"
+                android:shadowColor="@color/colorPrimary"
+                android:text="Paperback Non-Fiction Books"
+                android:textSize="20sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="44dp"
+                android:layout_marginBottom="10dp"
                 android:padding="10dp" />
 
 

@@ -8,6 +8,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,12 +34,19 @@ public class SplashScreen extends AppCompatActivity {
     ArrayList<Libro> paperBlack = new ArrayList();
     ArrayList<Libro> todos_libros = new ArrayList();
     String url, url1, url2;
+    ImageView imageView, imageView2;
     int cont = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+        imageView = findViewById(R.id.feather);
+        imageView2 = findViewById(R.id.ink);
+
+        Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in_animation);
+        imageView.startAnimation(animation);
+        imageView2.startAnimation(animation);
 
         url = "https://api.nytimes.com/svc/books/v3/lists.json?list-name=hardcover-fiction&api-key=ZPckoDI4RV9SBHcj282KHIbQ8i8Cdjoq";
         SplashScreen.HTTPConnector httpConnector = new SplashScreen.HTTPConnector(url);

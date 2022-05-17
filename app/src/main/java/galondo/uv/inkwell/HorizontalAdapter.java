@@ -61,8 +61,7 @@ public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.Vi
 
         // below line is use to set image from URL in our image view.
         if(!libros_filtrados.get(position).getImage_drawable().isEmpty()) {
-            //Log.d(null, "------------------>" + libros.get(position).getImage_drawable());
-            Picasso.get().load(libros_filtrados.get(position).getImage_drawable()).resize(100, 100).into(holder.iv);
+            Picasso.get().load(libros_filtrados.get(position).getImage_drawable()).resize(200, 200).into(holder.iv);
         }else
             Picasso.get().load("https://via.placeholder.com/300x400").into(holder.iv);
         //holder.iv.setImageResource(imageModelArrayList.get(position).getImage_drawable());

@@ -107,16 +107,17 @@ public class Libro extends AppCompatActivity implements Serializable {
         _image_drawable = (ImageView) findViewById(R.id.portada);
         _autor = (TextView) findViewById(R.id.autor);
         _genero = (TextView) findViewById(R.id.genero);
-        _ISBN = (TextView) findViewById(R.id.paginas);
-        _bookInfo = (TextView) findViewById(R.id.fecha);
+        _ISBN = (TextView) findViewById(R.id.isbn);
+        _bookInfo = (TextView) findViewById(R.id.info);
 
         Bundle extras = getIntent().getExtras();
+
         _name.setText(extras.getString("titulo"));
         //_image_drawable.setImageDrawable(extras.getImageDrawable("imagen"));
-        Picasso.get().load(extras.getString("imagen")).into(_image_drawable);
         _autor.setText(extras.getString("autor"));
-        _genero.setText(extras.getString("genero"));
+        Picasso.get().load(extras.getString("imagen")).resize(1000, 1000).into(_image_drawable);
         _ISBN.setText(extras.getString("ISBN"));
+        _genero.setText(extras.getString("genero"));
         _bookInfo.setText(extras.getString("info"));
         isLocal = extras.getBoolean("local");
         dbHandler = new DBHandler(Libro.this);

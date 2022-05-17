@@ -4,7 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SplashScreen"
-    android:background="@drawable/libro2">
+    android:scaleX="0.8"
+    android:scaleY="0.8"
+    tools:context=".SplashScreen">
+
+
+    <ImageView
+        android:id="@+id/feather"
+        android:layout_width="0dp"
+        android:layout_height="449dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toStartOf="@id/ink"
+        app:srcCompat="@drawable/feather"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="-21dp" />
+
+    <ImageView
+        android:id="@+id/ink"
+        android:layout_width="0dp"
+        android:layout_height="395dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ink"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="33dp" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/loadingcircles"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"></pl.droidsonroids.gif.GifImageView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

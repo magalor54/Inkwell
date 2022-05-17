@@ -14,23 +14,39 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center">
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/portada"
-                android:layout_width="wrap_content"
-                android:layout_height="227dp"
-                android:layout_marginTop="48dp"
-                app:srcCompat="@drawable/libro2" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="206dp"
+                android:layout_height="316dp"
+                android:layout_margin="5dp"
+                android:elevation="10dp"
+                android:paddingTop="20dp"
+                app:cardCornerRadius="8dp">
+
+                <ImageView
+                    android:id="@+id/portada"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/libro2" />
+            </androidx.cardview.widget.CardView>
 
             <TextView
                 android:id="@+id/titulo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:fontFamily="@font/roxale_hostory"
                 android:text="Título"
-                android:textSize="24sp" />
+                android:textColor="@color/colorPrimary"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/autor"
@@ -38,6 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="Autor"
+                android:textSize="16sp"
                 tools:text="Autor" />
 
             <TextView
@@ -45,21 +62,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="28dp"
-                android:text="Género" />
+                android:text="Género"
+                android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/paginas"
+                android:id="@+id/isbn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="36dp"
-                android:text="Páginas" />
+                android:text="Páginas"
+                android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/fecha"
+                android:id="@+id/info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="36dp"
-                android:text="2/2/2017" />
+                android:text="2/2/2017"
+                android:textSize="16sp" />
         </LinearLayout>
     </ScrollView>
 

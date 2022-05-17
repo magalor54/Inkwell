@@ -13,7 +13,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -55,10 +58,15 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> covers = new ArrayList();
     ArrayList<Libro> todos_libros = new ArrayList();
 
+    ImageView imageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        imageView = findViewById(R.id.featherChiquito);
+        Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_animation);
+        imageView.startAnimation(animation);
 
         this.todos_libros = (ArrayList<Libro>) getIntent().getSerializableExtra("todos_libros");
         this.fictionBooks = (ArrayList<Libro>) getIntent().getSerializableExtra("fictionBooks");
@@ -129,9 +137,9 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), Libro.class);
 
             intent.putExtra("titulo", String.valueOf(info.get(0)));
-            intent.putExtra("autor", String.valueOf(info.get(1)));
-            intent.putExtra("imagen", String.valueOf(info.get(2)));
-            intent.putExtra("ISBN", String.valueOf(info.get(3)));
+            intent.putExtra("imagen", String.valueOf(info.get(1)));
+            intent.putExtra("ISBN", String.valueOf(info.get(2)));
+            intent.putExtra("autor", String.valueOf(info.get(3)));
             intent.putExtra("genero", String.valueOf(info.get(4)));
             intent.putExtra("info", String.valueOf(info.get(5)));
 
@@ -151,9 +159,9 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), Libro.class);
 
             intent.putExtra("titulo", String.valueOf(info.get(0)));
-            intent.putExtra("autor", String.valueOf(info.get(1)));
-            intent.putExtra("imagen", String.valueOf(info.get(2)));
-            intent.putExtra("ISBN", String.valueOf(info.get(3)));
+            intent.putExtra("imagen", String.valueOf(info.get(1)));
+            intent.putExtra("ISBN", String.valueOf(info.get(2)));
+            intent.putExtra("autor", String.valueOf(info.get(3)));
             intent.putExtra("genero", String.valueOf(info.get(4)));
             intent.putExtra("info", String.valueOf(info.get(5)));
 
@@ -173,9 +181,9 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), Libro.class);
 
             intent.putExtra("titulo", String.valueOf(info.get(0)));
-            intent.putExtra("autor", String.valueOf(info.get(1)));
-            intent.putExtra("imagen", String.valueOf(info.get(2)));
-            intent.putExtra("ISBN", String.valueOf(info.get(3)));
+            intent.putExtra("imagen", String.valueOf(info.get(1)));
+            intent.putExtra("ISBN", String.valueOf(info.get(2)));
+            intent.putExtra("autor", String.valueOf(info.get(3)));
             intent.putExtra("genero", String.valueOf(info.get(4)));
             intent.putExtra("info", String.valueOf(info.get(5)));
 
