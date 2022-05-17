@@ -86,6 +86,8 @@ public class AddLibro extends AppCompatActivity {
         galondo.uv.inkwell.HTTPConnector task = new galondo.uv.inkwell.HTTPConnector(url);
         try {
             String urlPortada = task.execute().get();
+            if(urlPortada.isEmpty())
+                urlPortada = "https://via.placeholder.com/300x400";
             return urlPortada;
         } catch (ExecutionException e) {
             e.printStackTrace();

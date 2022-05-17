@@ -64,13 +64,10 @@ public class Busqueda extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_busqueda);
-        Log.d(null, "YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
         Bundle extras = getIntent().getExtras();
         todos_libros = (ArrayList<Libro>) getIntent().getSerializableExtra("todos_libros");
-        Log.d(null, "------------------");
         Log.d(null, todos_libros.toString());
         RecycleView(todos_libros);
-        Log.d(null, "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
     }
 
     private void RecycleView( ArrayList<Libro> libro){
@@ -92,19 +89,14 @@ public class Busqueda extends AppCompatActivity {
             // This viewHolder will have all required values.
             RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
 
-            //Log.d(null, "Este es mi print---->"+adapter.getInfoPosition(viewHolder.getAdapterPosition()).toString());
-            Log.d(null,  view.getTag().toString());
             info = adapter.getInfoPosition(viewHolder.getAdapterPosition());
-            Log.d(null, info.toString());
-            // Implement the listener!
 
             Intent intent = new Intent(getApplicationContext(), Libro.class);
 
-
             intent.putExtra("titulo", String.valueOf(info.get(0)));
-            intent.putExtra("autor", String.valueOf(info.get(1)));
-            intent.putExtra("imagen", String.valueOf(info.get(2)));
-            intent.putExtra("ISBN", String.valueOf(info.get(3)));
+            intent.putExtra("imagen", String.valueOf(info.get(1)));
+            intent.putExtra("ISBN", String.valueOf(info.get(2)));
+            intent.putExtra("autor", String.valueOf(info.get(3)));
             intent.putExtra("genero", String.valueOf(info.get(4)));
             intent.putExtra("info", String.valueOf(info.get(5)));
 
