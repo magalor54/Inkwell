@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/constraint"
     tools:context=".MainActivity">
 
     <ScrollView
@@ -19,14 +20,25 @@
 
             <TextView
                 android:id="@+id/textView"
-                android:layout_width="328dp"
+                android:layout_width="249dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:fontFamily="@font/roxale_caligraphic"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/playfair_semibold"
                 android:text="Inkwell"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimary"
                 android:textSize="60sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="305dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/playfair_semibold"
+                android:text="Book Store"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
             <ImageView
@@ -115,17 +127,6 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
         android:src="@drawable/ic_baseline_book_24"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="80dp"
-        android:src="@android:drawable/ic_search_category_default"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

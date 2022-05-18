@@ -4,24 +4,31 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
 
+import jp.wasabeef.picasso.transformations.BlurTransformation;
+
 public class Libro extends AppCompatActivity implements Serializable {
 
     private TextView _name;
     private ImageView _image_drawable;
+    private ImageView _background_image;
     private TextView _autor;
     private TextView _ISBN;
     private TextView _genero;
@@ -105,6 +112,7 @@ public class Libro extends AppCompatActivity implements Serializable {
 
         _name = (TextView) findViewById(R.id.titulo);
         _image_drawable = (ImageView) findViewById(R.id.portada);
+        _background_image = (ImageView) findViewById(R.id.backgorundImage);
         _autor = (TextView) findViewById(R.id.autor);
         _genero = (TextView) findViewById(R.id.genero);
         _ISBN = (TextView) findViewById(R.id.isbn);
@@ -116,36 +124,43 @@ public class Libro extends AppCompatActivity implements Serializable {
         //_image_drawable.setImageDrawable(extras.getImageDrawable("imagen"));
         _autor.setText(extras.getString("autor"));
         Picasso.get().load(extras.getString("imagen")).resize(1000, 1000).into(_image_drawable);
+        Picasso.get()
+                .load(extras.getString("imagen"))
+                .resize(1000, 1000)
+                .transform(new BlurTransformation(this, 25, 1))
+                .into(_background_image);
+
         _ISBN.setText(extras.getString("ISBN"));
         _genero.setText(extras.getString("genero"));
         _bookInfo.setText(extras.getString("info"));
         isLocal = extras.getBoolean("local");
         dbHandler = new DBHandler(Libro.this);
-        }
 
-    /*************************************/
-    /* Create the actionbar options menu */
-    /*************************************/
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
         if (isLocal) {
-            menu.add(0, 0, 0, "Delete").setIcon(R.drawable.ic_baseline_delete_24)
-                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
+            //dbHandler.deleteCourse(_name.getText().toString());
+
+            FloatingActionButton floatingActionButton = new FloatingActionButton(this);
+
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.setMargins(32, 32, 32, 32);
+            floatingActionButton.setLayoutParams(layoutParams);
+            floatingActionButton.setImageResource(android.R.drawable.ic_menu_delete);
+            floatingActionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // We are showing only toast message. However, you can do anything you need.
+                    Toast.makeText(getApplicationContext(), "You clicked Floating Action Button", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            LinearLayout linearLayout = findViewById(R.id.rootContainer);
+            if (linearLayout != null) {
+                linearLayout.addView(floatingActionButton);
+            }
         }
-        return true;
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        dbHandler.deleteCourse(_name.getText().toString());
-        return true;
 
 
     }
 
-
     }
-
-

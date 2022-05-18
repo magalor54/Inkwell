@@ -19,6 +19,7 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".SplashScreen"
+            android:theme="@style/AppTheme.NoActionBar"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,12 +35,15 @@
             android:exported="false" />
         <activity
             android:name=".Libro"
+            android:theme="@style/AppTheme.NoActionBar"
             android:exported="false" />
         <activity
             android:name=".Biblioteca"
+            android:theme="@style/AppTheme.NoActionBar"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
+            android:label=""
             android:exported="false" />
 
         <receiver android:name=".MyBroadcastReceiver"></receiver>

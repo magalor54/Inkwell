@@ -1,5 +1,7 @@
 package galondo.uv.inkwell;
 
+import static java.util.Calendar.WEDNESDAY;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -32,6 +34,7 @@ import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.concurrent.ExecutionException;
 
 public class SplashScreen extends AppCompatActivity {
@@ -55,7 +58,27 @@ public class SplashScreen extends AppCompatActivity {
         imageView.startAnimation(animation);
         imageView2.startAnimation(animation);
 
+
         createNotificationChannel();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 10);
+        calendar.set(Calendar.MINUTE, 22);
+        calendar.set(Calendar.SECOND, 00);
+
+        if (Calendar.getInstance().after(calendar)) {
+            calendar.add(Calendar.DAY_OF_WEEK, WEDNESDAY);
+        }
+
+        Intent intent = new Intent(SplashScreen.this, MyBroadcastReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+        }
+
 
         url = "https://api.nytimes.com/svc/books/v3/lists.json?list-name=hardcover-fiction&api-key=ZPckoDI4RV9SBHcj282KHIbQ8i8Cdjoq";
         SplashScreen.HTTPConnector httpConnector = new SplashScreen.HTTPConnector(url);
@@ -207,44 +230,19 @@ public class SplashScreen extends AppCompatActivity {
     private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
-        Log.d(null, "NOTIFIACION NO CREADA -------------------------------------");
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Log.d(null, "NOTIFIACION CREADA -------------------------------------");
             CharSequence name = getString(R.string.channel_name);
             String description = getString(R.string.channel_description);
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel("54", name, importance);
             channel.setDescription(description);
+
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
 
-            Intent intent2 = new Intent(this, Biblioteca.class);
-            intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent2, 0);
-
-            Log.d(null, "SI HE ENTRADO EN MY BROADCAST!! -----------------------");
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "54")
-                    .setSmallIcon(R.drawable.inkwell)
-                    .setContentTitle("INKWELL")
-                    .setContentText("Añade un libro nuevo a tu biblioteca!")
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .setContentIntent(pendingIntent)
-                    .setSilent(false)
-                    .setAutoCancel(true);
-
-
-            //NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-
-            // notificationId is a unique int for each notification that you must define
-            notificationManager.notify(54, builder.build());
-
-            //Intent intent = new Intent(this, MyBroadcastReceiver.class);
-            //PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), 234324243, intent, 0);
-            //AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-            //alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5000, pendingIntent);
-            Toast.makeText(this, "ALARMA CREADA", Toast.LENGTH_SHORT).show();
         }
     }
 }

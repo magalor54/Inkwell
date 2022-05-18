@@ -12,6 +12,8 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -78,16 +80,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(view.getContext(), Biblioteca.class);
-                startActivity(myIntent);
-            }
-        });
-
-        FloatingActionButton fab2 = findViewById(R.id.fab2);
-        fab2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent myIntent = new Intent(view.getContext(), Busqueda.class);
-                myIntent.putExtra("todos_libros", todos_libros);
                 startActivity(myIntent);
             }
         });
@@ -203,7 +195,32 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /*************************************/
+    /* Create the actionbar options menu */
+    /*************************************/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        menu.add(0, 0, 0, "Buscar").setIcon(R.drawable.ic_baseline_search_24)
+                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+       return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+
+        Intent myIntent = new Intent(this, Busqueda.class);
+        myIntent.putExtra("todos_libros", todos_libros);
+        startActivity(myIntent);
+        return true;
+
+
+    }
+
     };
+
+
 
 
 
