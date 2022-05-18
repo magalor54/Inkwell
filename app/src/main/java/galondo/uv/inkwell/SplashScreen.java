@@ -1,9 +1,13 @@
 package galondo.uv.inkwell;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -13,6 +17,7 @@ import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,6 +55,8 @@ public class SplashScreen extends AppCompatActivity {
         imageView.startAnimation(animation);
         imageView2.startAnimation(animation);
 
+        createNotificationChannel();
+
         url = "https://api.nytimes.com/svc/books/v3/lists.json?list-name=hardcover-fiction&api-key=ZPckoDI4RV9SBHcj282KHIbQ8i8Cdjoq";
         SplashScreen.HTTPConnector httpConnector = new SplashScreen.HTTPConnector(url);
 
@@ -68,7 +75,7 @@ public class SplashScreen extends AppCompatActivity {
         else {
             httpConnector.execute(String.valueOf((Void) null));
         }
-        createNotificationChannel();
+
     }
 
     class HTTPConnector extends AsyncTask<String, Void, ArrayList> {
@@ -212,6 +219,32 @@ public class SplashScreen extends AppCompatActivity {
             // or other notification behaviors after this
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
+
+            Intent intent2 = new Intent(this, Biblioteca.class);
+            intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent2, 0);
+
+            Log.d(null, "SI HE ENTRADO EN MY BROADCAST!! -----------------------");
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "54")
+                    .setSmallIcon(R.drawable.inkwell)
+                    .setContentTitle("INKWELL")
+                    .setContentText("Añade un libro nuevo a tu biblioteca!")
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setContentIntent(pendingIntent)
+                    .setSilent(false)
+                    .setAutoCancel(true);
+
+
+            //NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+
+            // notificationId is a unique int for each notification that you must define
+            notificationManager.notify(54, builder.build());
+
+            //Intent intent = new Intent(this, MyBroadcastReceiver.class);
+            //PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), 234324243, intent, 0);
+            //AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+            //alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5000, pendingIntent);
+            Toast.makeText(this, "ALARMA CREADA", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
         RecycleView(fictionBooks);
         RecycleView(paperBlack);
 
-        startAlert();
+        //startAlert();
     }
 
 
