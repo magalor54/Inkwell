@@ -13,21 +13,21 @@
         android:id="@+id/feather"
         android:layout_width="0dp"
         android:layout_height="449dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         app:layout_constraintStart_toStartOf="@id/ink"
         app:srcCompat="@drawable/feather"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="-21dp" />
+        tools:layout_editor_absoluteY="110dp" />
 
     <ImageView
         android:id="@+id/ink"
         android:layout_width="0dp"
         android:layout_height="395dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="28dp"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/ink"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="33dp" />
+        tools:layout_editor_absoluteY="144dp" />
 
     <pl.droidsonroids.gif.GifImageView
         android:layout_width="wrap_content"

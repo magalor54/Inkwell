@@ -138,7 +138,7 @@ public class Libro extends AppCompatActivity implements Serializable {
 
         if (isLocal) {
 
-            //dbHandler.deleteCourse(_name.getText().toString());
+            //
 
             FloatingActionButton floatingActionButton = new FloatingActionButton(this);
 
@@ -150,8 +150,7 @@ public class Libro extends AppCompatActivity implements Serializable {
                 @Override
                 public void onClick(View view) {
                     // We are showing only toast message. However, you can do anything you need.
-                    Toast.makeText(getApplicationContext(), "You clicked Floating Action Button", Toast.LENGTH_SHORT).show();
-                }
+                    dbHandler.deleteCourse(_name.getText().toString());                }
             });
 
             LinearLayout linearLayout = findViewById(R.id.rootContainer);

@@ -14,7 +14,7 @@ import java.util.concurrent.ExecutionException;
 public class AddLibro extends AppCompatActivity {
 
     // creating variables for our edittext, button and dbhandler
-    private EditText bookTitleEdt, bookAuthorEdt, bookISBNEdt, bookDescriptionEdt, bookImageEdt, bookGenreEdt;
+    private EditText bookTitleEdt, bookAuthorEdt, bookISBNEdt, bookDescriptionEdt, bookGenreEdt;
     private Button addCourseBtn;
     private DBHandler dbHandler;
 
@@ -28,7 +28,6 @@ public class AddLibro extends AppCompatActivity {
         bookAuthorEdt = findViewById(R.id.idEdtBookAuthor);
         bookDescriptionEdt = findViewById(R.id.idEdtBookDescription);
         bookISBNEdt = findViewById(R.id.idEdtBookISBN);
-        bookImageEdt = findViewById(R.id.idEdtBookImage);
         bookGenreEdt = findViewById(R.id.idEdtBookGenre);
         addCourseBtn = (Button) findViewById(R.id.idBtnAddBook);
 
@@ -46,7 +45,7 @@ public class AddLibro extends AppCompatActivity {
                 String bookAuthor = bookAuthorEdt.getText().toString();
                 String bookDescription = bookDescriptionEdt.getText().toString();
                 String bookISBN = bookISBNEdt.getText().toString();
-                String bookImage = bookImageEdt.getText().toString();
+                String bookImage;
                 String bookGenre = bookGenreEdt.getText().toString();
 
                 Log.d(null, "Titulo: " + bookTitle);
@@ -54,11 +53,10 @@ public class AddLibro extends AppCompatActivity {
                 Log.d(null, "Autor: " + bookAuthor);
                 Log.d(null, "Descripcion: " + bookDescription);
                 Log.d(null, "ISBN: " + bookISBN);
-                Log.d(null, "Imagen: " + bookImage);
                 Log.d(null, "Genero: " + bookGenre);
 
                 // validating if the text fields are empty or not.
-                if (bookTitle.isEmpty() && bookAuthor.isEmpty() && bookDescription.isEmpty() && bookISBN.isEmpty() && bookImage.isEmpty() && bookGenre.isEmpty()) {
+                if (bookTitle.isEmpty() && bookAuthor.isEmpty() && bookDescription.isEmpty() && bookISBN.isEmpty() && bookGenre.isEmpty()) {
                     Toast.makeText(AddLibro.this, "Please enter all the data..", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -75,7 +73,6 @@ public class AddLibro extends AppCompatActivity {
                 bookAuthorEdt.setText("");
                 bookDescriptionEdt.setText("");
                 bookISBNEdt.setText("");
-                bookImageEdt.setText("");
                 bookGenreEdt.setText("");
             }
         });
@@ -86,7 +83,7 @@ public class AddLibro extends AppCompatActivity {
         galondo.uv.inkwell.HTTPConnector task = new galondo.uv.inkwell.HTTPConnector(url);
         try {
             String urlPortada = task.execute().get();
-            if(urlPortada.isEmpty())
+            if(urlPortada.isEmpty() || urlPortada == null || urlPortada == "")
                 urlPortada = "https://via.placeholder.com/300x400";
             return urlPortada;
         } catch (ExecutionException e) {
